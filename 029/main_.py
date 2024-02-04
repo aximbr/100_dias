@@ -1,9 +1,22 @@
 from tkinter import *
+
 WHITE = "#ffffff"
+FILENAME = "data.txt"
+
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+def save_to_file():
+    line = f"{entry_website.get()}|{entry_username.get()}|{entry_password.get()}'\n'"
+    with open(FILENAME, "a") as fp:
+        fp.write(line)
+    entry_website.delete(0, END)
+    entry_password.delete(0, END)
+    entry_website.focus()
+        
+    
+     
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -29,9 +42,11 @@ lbl_password.grid(column=0, row=3, sticky="E")
 
 entry_website = Entry(width=35)
 entry_website.grid(column=1, row=1, columnspan=2, sticky="W")
+entry_website.focus()
 
 entry_username = Entry(width=35)
 entry_username.grid(column=1, row=2, columnspan=2, sticky="W")
+entry_username.insert(0, "jose.p.leitao@gmail.com")
 
 entry_password = Entry(width=21)
 entry_password.grid(column=1, row=3, sticky="W")
@@ -39,7 +54,7 @@ entry_password.grid(column=1, row=3, sticky="W")
 button_generate = Button(text="Generate Password", command=None)
 button_generate.grid(column=2, row=3)
 
-button_add = Button(text="Add", width=36, command=None)
+button_add = Button(text="Add", width=36, command=save_to_file)
 button_add.grid(column=1, row=4, columnspan=2, sticky="W")
 
 window.mainloop()
