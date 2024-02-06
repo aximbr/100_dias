@@ -5,7 +5,7 @@ import pyperclip
 import json
 
 WHITE = "#ffffff"
-FILENAME = "data.txt"
+FILENAME = "data.json"
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -60,19 +60,19 @@ def save_to_file():
         messagebox.showerror(title= "Error", message="Please don't leave any field empty!")
     else:       
         try:
-            with open("data.json", "r") as data_file:
+            with open(FILENAME, "r") as data_file:
                 #reading the old file
                 data = json.load(data_file)
                 
         except FileNotFoundError:
-            with open("data.json", "w") as data_file:
+            with open(FILENAME, "w") as data_file:
                 #create a new file
                 json.dump(new_data, data_file, indent=4)
             
         else:
             #update with new data
             data.update(new_data)
-            with open("data.json", "w") as data_file:
+            with open(FILENAME, "w") as data_file:
                 #saving update data on file
                 json.dump(data, data_file, indent=4)
                 
@@ -80,7 +80,40 @@ def save_to_file():
             entry_website.delete(0, END)
             entry_password.delete(0, END)
             entry_website.focus()
+#----------------------------- SEARCH -------------------------------- #
+def find_password():
+    website = entry_website.get()
+    username = ""
+    password = ""
         
+    if len(website) == 0:
+        messagebox.showerror(title= "Error", message="Please don't leave any field empty!")
+    else:       
+        try:
+            with open(FILENAME, "r") as data_file:
+                #reading the data file
+                data = json.load(data_file)
+                
+        except FileNotFoundError:
+            messagebox.showerror(title= "Error", message="No Datafile found!")
+              
+        else:
+            #search for website
+            # try:
+            #     username = data[website]['email']
+            #     password = data[website]['password']
+            # except KeyError:
+            #     messagebox.showerror(title= website, message=f"No details for {website} exists.")
+            # else:
+            #     messagebox.showinfo(title= website, message=f"username: {username}\npassword: {password}")
+            if website in data:
+                username = data[website]['email']
+                password = data[website]['password']
+                messagebox.showinfo(title= website, message=f"username: {username}\npassword: {password}") 
+            else:
+                messagebox.showinfo(title= website, message=f"No details for {website} exists.")  
+        
+        entry_website.focus()        
     
      
 
@@ -106,21 +139,24 @@ lbl_user_name.grid(column=0, row=2)
 lbl_password = Label(text="Password:", bg=WHITE)
 lbl_password.grid(column=0, row=3, sticky="E")
 
-entry_website = Entry(width=35)
-entry_website.grid(column=1, row=1, columnspan=2, sticky="W")
+entry_website = Entry(width=30, highlightthickness=1)
+entry_website.grid(column=1, row=1, columnspan=2, sticky="W", pady=2)
 entry_website.focus()
 
-entry_username = Entry(width=35)
-entry_username.grid(column=1, row=2, columnspan=2, sticky="W")
+entry_username = Entry(width=30, highlightthickness=1)
+entry_username.grid(column=1, row=2, columnspan=2, sticky="W", pady=2)
 entry_username.insert(0, "jose.p.leitao@gmail.com")
 
-entry_password = Entry(width=21)
-entry_password.grid(column=1, row=3, sticky="W")
+entry_password = Entry(width=30, highlightthickness=1)
+entry_password.grid(column=1, row=3, sticky="W", pady=2)
 
 button_generate = Button(text="Generate Password", command=gen_password)
 button_generate.grid(column=2, row=3)
 
 button_add = Button(text="Add", width=36, command=save_to_file)
 button_add.grid(column=1, row=4, columnspan=2, sticky="W")
+
+button_search = Button(text="Search", command=find_password)
+button_search.grid(column=2, row=1, sticky="W")
 
 window.mainloop()
