@@ -1,34 +1,56 @@
-import smtplib
+##################### Extra Hard Starting Project ######################
+
+# 1. Update the birthdays.csv
+
+# 2. Check if today matches a birthday in the birthdays.csv
+
+# 3. If step 2 is true, pick a random letter from letter templates and replace the [NAME] with the person's actual name from birthdays.csv
+
+# 4. Send the letter generated in step 3 to that person's email address.
+
+#load birthdays.cdv to a dictionary
+import pandas
 import datetime as dt
 import random
-
-#Load the quotes.txt to a list 
-#Check the day of week
-#If the day match, pick a random quote and e-mail to destination
+import smtplib
 
 my_email = "usuario@email.com"
 my_password = "senha_secreta"
 PROVIDER = "smtp.gmail.com"
-DESTINATION = "somebody@email.com"
 
-def send_message(destination, message):
+
+
+def send_message(name_in, email_in):
+    
+    # letters = ["letter_templates/letter_1.txt", "letter_templates/letter_2.txt", "letter_templates/letter_3.txt"]
+    # random_letter = random.choice(letters)
+    random_letter = f"letter_templates/letter_{random.randint(1,3)}.txt"
+    
+    with open(random_letter, "r") as fp:
+        template_letter = fp.read()
+        
+    new_message = template_letter.replace("[NAME]", name_in)
+    
     with smtplib.SMTP(PROVIDER) as connection:
         connection.starttls()
         connection.login(user=my_email, password=my_password)
         connection.sendmail(
             from_addr=my_email,
-            to_addrs=destination,
-            msg=f"Subject: New message\n\n{message}"
+            to_addrs=email_in,
+            msg=f"Subject: Happy Birthday!\n\n{new_message}"
                         )
 
+
+
 #main()
-with open("quotes.txt", "r") as fp:
-    data = fp.readlines()
-    
+data = pandas.read_csv("birthdays.csv").to_dict("records")
+
 now = dt.datetime.now()
 
-if now.weekday() == 2: #Wednesday
-    message = random.choice(data)
-    send_message(DESTINATION, message)
-else:
-    print("Nothing to send")
+for record in data:
+    if record["month"] == now.month and record["day"] == now.day:
+        send_message(record["name"], record["email"])
+        
+
+
+
