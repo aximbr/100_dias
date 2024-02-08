@@ -1,32 +1,72 @@
-from tkinter import *
 import requests
-URL="https://api.kanye.rest"
+from datetime import datetime
+import smtplib
+import time
+
+#MY_LAT = 51.507351 # Your latitude
+#MY_LONG = -0.127758 # Your longitude
+
+MY_LAT=-22.097909
+MY_LONG=-51.398390
+my_email = "usuario@email.com"
+my_password = "senha_secreta"
+PROVIDER = "smtp.gmail.com"
+
+#Your position is within +5 or -5 degrees of the ISS position.
 
 
 
-def get_quote():
-    response = requests.get(url=URL)
+
+
+#If the ISS is close to my current position
+# and it is currently dark
+# Then send me an email to tell me to look up.
+# BONUS: run the code every 60 seconds.
+
+def send_message():
+
+        
+    new_message = "ISS is near, lookup!"
+    
+    with smtplib.SMTP(PROVIDER) as connection:
+        connection.starttls()
+        connection.login(user=my_email, password=my_password)
+        connection.sendmail(
+            from_addr=my_email,
+            to_addrs=my_email,
+            msg=f"Subject: ISS is coming!\n\n{new_message}"
+                        )
+
+def is_iss_close():
+    response = requests.get(url="http://api.open-notify.org/iss-now.json")
     response.raise_for_status()
-
     data = response.json()
-    canvas.itemconfig(quote_text, text=data["quote"])
 
+    iss_latitude = float(data["iss_position"]["latitude"])
+    iss_longitude = float(data["iss_position"]["longitude"])
+    
+    return (MY_LAT-5) <= iss_latitude <= (MY_LAT+5) and (MY_LONG-5) <= iss_longitude <= (MY_LONG+5)
 
+def is_night():
+    parameters = {
+    "lat": MY_LAT,
+    "lng": MY_LONG,
+    "formatted": 0,
+    "tzid" : "America/Sao_Paulo"
+    }
 
-window = Tk()
-window.title("Kanye Says...")
-window.config(padx=50, pady=50)
+    response = requests.get("https://api.sunrise-sunset.org/json", params=parameters)
+    response.raise_for_status()
+    data = response.json()
+    sunrise = int(data["results"]["sunrise"].split("T")[1].split(":")[0])
+    sunset = int(data["results"]["sunset"].split("T")[1].split(":")[0])
 
-canvas = Canvas(width=300, height=414)
-background_img = PhotoImage(file="background.png")
-canvas.create_image(150, 207, image=background_img)
-quote_text = canvas.create_text(150, 207, text="Kanye Quote Goes HERE", width=250, font=("Arial", 30, "bold"), fill="white")
-canvas.grid(row=0, column=0)
+    time_now = datetime.now().hour
+    
+    return  time_now > sunset or time_now < sunrise
 
-kanye_img = PhotoImage(file="kanye.png")
-kanye_button = Button(image=kanye_img, highlightthickness=0, command=get_quote)
-kanye_button.grid(row=1, column=0)
-
-
-
-window.mainloop()
+#main()
+while True:
+    time.sleep(60)
+    if is_iss_close() and is_night():
+        send_message()
