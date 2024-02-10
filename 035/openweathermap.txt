@@ -1,0 +1,9 @@
+e-mail: doyipe3934@rohoza.com
+password: 12345678
+Api provider: https://home.openweathermap.org/
+Example:
+https://api.openweathermap.org/data/2.5/weather?lat=-22.097909&lon=-51.398390&appid=df81b375a67553f9bc6147884a0d280a
+
+API Doc: https://openweathermap.org/current
+
+API KEY = df81b375a67553f9bc6147884a0d280a
