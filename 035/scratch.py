@@ -5,7 +5,8 @@ URL="https://api.openweathermap.org/data/2.5/weather"
 #The onecall API does not work with free subscription
 URL2="https://api.openweathermap.org/data/2.5/onecall"
 
-MY_KEY= "df81b375a67553f9bc6147884a0d280a"
+#The key was modified and not work
+MY_KEY= "df81b375a67553f9bc6147884a0d28XX"
 MY_LAT=-22.097909
 MY_LONG=-51.398390
 
@@ -16,7 +17,7 @@ parameters= {
     "appid" : MY_KEY
 }
 
-#https://api.openweathermap.org/data/2.5/weather?lat=-22.097909&lon=-51.398390&appid=df81b375a67553f9bc6147884a0d280a
+#https://api.openweathermap.org/data/2.5/weather?lat=-22.097909&lon=-51.398390&appid=df81b375a67553f9bc6147884a0d28XX
 
 response = requests.get(url=URL, params=parameters)
 response.raise_for_status()
