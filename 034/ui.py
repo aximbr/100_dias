@@ -21,10 +21,10 @@ class QuizInterface:
                                               font=("Ariel",20,"italic"))
         self.canvas.grid(row=1, column=0, columnspan=2, pady=50)
         
-        self.false_button = Button(image=false_image, highlightthickness=0, command=None)
+        self.false_button = Button(image=false_image, highlightthickness=0, command=self.user_answer_false)
         self.false_button.grid(column=1, row=2)
         
-        self.true_button = Button(image=true_image, highlightthickness=0, command=None)
+        self.true_button = Button(image=true_image, highlightthickness=0, command=self.user_answer_true)
         self.true_button.grid(column=0, row=2)
         
         self.score_lbl = Label(text="Score: 0", bg=THEME_COLOR, fg="white", font=("Ariel",12))
@@ -37,6 +37,13 @@ class QuizInterface:
     def get_next_question(self):
         question = self.quiz.next_question()
         self.canvas.itemconfig(self.q_text, text= question)
+        
+    
+    def user_answer_true(self):
+        self.quiz.check_answer("True")
+    
+    def user_answer_false(self):
+        self.quiz.check_answer("False")
            
         
 
