@@ -6,7 +6,7 @@ URL="https://api.openweathermap.org/data/2.5/weather"
 URL2="https://api.openweathermap.org/data/2.5/onecall"
 
 #The key was modified and not work
-MY_KEY= "df81b375a67553f9bc6147884a0d28XX"
+MY_KEY= ""
 MY_LAT=-22.097909
 MY_LONG=-51.398390
 
