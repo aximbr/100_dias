@@ -29,27 +29,16 @@
 #             print(response.text)
 import pandas
 CSV_FILE = "Flight Deals.csv"
+CSV_FILE_OUT = "output.csv"
+
 class DataManager:
 
     def __init__(self):
         self.destination_data = {}
 
     def get_destination_data(self):
-        file_csv = pandas.read_csv(CSV_FILE, na_filter=False)
-        data = file_csv.to_dict(orient="list")
-        self.destination_data = data
+        self.destination_data = pandas.read_csv(CSV_FILE, na_filter=False)
         return self.destination_data
 
     def update_destination_codes(self):
-        for City in self.destination_data:
-            new_data = {
-                "price": {
-                    "iataCode": City["iataCode"]
-                }
-            }
-            print(new_data)
-            # response = requests.put(
-            #     url=f"{SHEETY_PRICES_ENDPOINT}/{city['id']}",
-            #     json=new_data
-            # )
-            # print(response.text)
+        self.destination_data.to_csv(CSV_FILE_OUT, index=False)
