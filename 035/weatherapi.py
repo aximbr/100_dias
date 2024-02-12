@@ -4,7 +4,7 @@ import datetime as dt
 URL="https://api.weatherapi.com/v1/forecast.json"
 
 #The key was modified and not work
-MY_KEY= "1e8a23e877d741dba041339362410XX"
+MY_KEY= ""
 MY_LAT=-22.097909
 MY_LONG=-51.398390
 MY_LATLONG = f"{MY_LAT},{MY_LONG}"
