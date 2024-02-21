@@ -1,35 +1,28 @@
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
+URL = "https://web.archive.org/web/20200518073855/https://www.empireonline.com/movies/features/best-movies-2/"
+
+# Write your code below this line 👇
 
 #main()
-yc_response = requests.get(url="https://news.ycombinator.com/")
+response = requests.get(url=URL)
 
-soup = BeautifulSoup(yc_response.text, 'html.parser')
+soup = BeautifulSoup(response.text, 'html.parser')
 
-print(soup.title.text)
-articles = soup.find_all(name="span", class_="titleline")
-article_names = []
-article_hrefs = []
-for article in articles:
-    article_names.append(article.get_text())
-    article_hrefs.append(article.find(name="a").get("href"))
-    
-# article_text = article_tag.get_text()
-# article_link = article_tag.find_all(name="a").get("href")
-article_scores =[]
+titles_tag = soup.find_all(name="h3", class_="title")
+# titles = []
+# for tag in titles_tag:
+#     titles.append(tag.text)
+titles = [tag.text for tag in titles_tag]
+print(titles[::-1])
+
+#Saving to a file
+with open("movies.txt", "w") as fp:
+    fp.write("\n".join(titles[::-1]))
+    # for title in titles:
+    #     file.write(f"{title}\n")
 
 
-scores = soup.find_all(name="span", class_="score")
-for score in scores:
-    point = int(score.text.split()[0])
-    article_scores.append(point)
 
-# print(article_names)
-# print(article_hrefs)
-print(article_scores)
 
-position = article_scores.index(max(article_scores))
-print(position)
-print(article_names[position])
-print(article_scores[position])
