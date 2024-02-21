@@ -1,20 +1,35 @@
 from bs4 import BeautifulSoup
+import requests
 
 
 #main()
-with open("website.html", "r", encoding='utf-8') as fp:
-    contents = fp.read()
-    
-soup = BeautifulSoup(contents, 'html.parser')
+yc_response = requests.get(url="https://news.ycombinator.com/")
 
-all_anchor_tags = soup.find_all(name="a")
+soup = BeautifulSoup(yc_response.text, 'html.parser')
 
-for tag in all_anchor_tags:
-    print(tag.get("href"))
+print(soup.title.text)
+articles = soup.find_all(name="span", class_="titleline")
+article_names = []
+article_hrefs = []
+for article in articles:
+    article_names.append(article.get_text())
+    article_hrefs.append(article.find(name="a").get("href"))
     
-heading = soup.find(name="h1", id="name")
-print(heading.text)
+# article_text = article_tag.get_text()
+# article_link = article_tag.find_all(name="a").get("href")
+article_scores =[]
 
-company_url = soup.select_one("p a")
-print(company_url)
-    
+
+scores = soup.find_all(name="span", class_="score")
+for score in scores:
+    point = int(score.text.split()[0])
+    article_scores.append(point)
+
+# print(article_names)
+# print(article_hrefs)
+print(article_scores)
+
+position = article_scores.index(max(article_scores))
+print(position)
+print(article_names[position])
+print(article_scores[position])
