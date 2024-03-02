@@ -2,6 +2,21 @@ from flask import Flask
 
 app = Flask(__name__)
 
+def make_bold(function):
+    def wrapper():
+        return "<b>" + function() + "</b>"
+    return wrapper 
+
+def make_emphasis(function):
+    def wrapper():
+        return "<em>" + function() + "</em>"
+    return wrapper
+
+def make_underlined(function):
+    def wrapper():
+        return "<u>" + function() + "</u>"
+    return wrapper
+
 @app.route("/")
 def hello():
     return '<h1 style="text-align: center">Hello World!</h1> \
@@ -17,6 +32,13 @@ def show_double(post_id):
     # show the post with the given id, the id is an integer
     double = 2*post_id
     return 'Post %d' %double
+
+@app.route("/bye")
+@make_bold
+@make_emphasis
+@make_underlined
+def bye():
+    return "Bye!"
 
 #main()
 
