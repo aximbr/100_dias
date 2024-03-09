@@ -28,12 +28,12 @@ def get_gender(name):
 def home():
     return render_template("index.html", year = current_year)
 
-@app.route('/<name_in>')
+@app.route('/guess/<name_in>')
 def great(name_in):
     name = str(name_in).capitalize()
     age = get_age(name)
     gender = get_gender(name)
-    return render_template("index.html", out_name = name, out_age = age, out_gender = gender, year = current_year, )
+    return render_template("guess.html", out_name = name, out_age = age, out_gender = gender, year = current_year, )
 
 if __name__ == "__main__":
     app.run(debug=True)
