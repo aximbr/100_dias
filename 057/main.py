@@ -30,10 +30,17 @@ def home():
 
 @app.route('/guess/<name_in>')
 def great(name_in):
-    name = str(name_in).capitalize()
+    name = str(name_in).title()
     age = get_age(name)
     gender = get_gender(name)
     return render_template("guess.html", out_name = name, out_age = age, out_gender = gender, year = current_year, )
+
+@app.route('/blog')
+def blog():
+    blog_url = 'https://api.npoint.io/c790b4d5cab58020d391'
+    response = requests.get(blog_url)
+    all_posts = response.json()
+    return render_template('blog.html', posts=all_posts)
 
 if __name__ == "__main__":
     app.run(debug=True)
