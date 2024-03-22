@@ -8,7 +8,7 @@ number = random.randint(0,9)
 def hello():
     return '<h1> Guess a number between 0 and 9</h1>\
         <img src=https://media.giphy.com/media/3o7aCSPqXE5C6T8tBC/giphy.gif>'
-        
+
 @app.route("/<int:guess>")
 def check_number(guess):
     global number
